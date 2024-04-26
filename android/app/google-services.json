@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "94796923701",
+    "project_id": "recordify-e4c57",
+    "storage_bucket": "recordify-e4c57.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94796923701:android:e6936ca29298787ba0027c",
+        "android_client_info": {
+          "package_name": "com.example.recordify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0j4wvY8yA_Ab7xSY9oA7p4Kl1H_qYzQQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
