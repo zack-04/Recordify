@@ -76,11 +76,6 @@ class _HomeScreenState extends State<HomeScreen> {
     
     final appProvider = Provider.of<AppProvider>(context);
 
-    Future<bool> checkIfVideosExist() async {
-      final event = await ref.once(DatabaseEventType.value);
-      return event.snapshot.value != null;
-    }
-
     recordVideo() async {
       await getUserAddress();
       final XFile? cameraVideo =
