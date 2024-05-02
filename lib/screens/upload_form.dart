@@ -71,6 +71,7 @@ class _UploadFormState extends State<UploadForm> {
       "category": categoryController.text,
       "location": locationController.text,
       "videoUrl": url,
+      "createdAt": DateTime.now().toIso8601String()
     });
   }
 

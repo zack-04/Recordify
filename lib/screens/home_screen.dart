@@ -1,4 +1,7 @@
 
+import 'dart:async';
+import 'dart:ffi';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +24,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   double? lat;
-
   double? long;
-
   String address = "";
 
   Future<Position> _determinePosition() async {
@@ -61,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
     await getAddressFromCoordinates(data.latitude, data.longitude);
   }
 
-//For convert lat long to address
+  //Fetching address from coordinates
   getAddressFromCoordinates(lat, long) async {
     List<Placemark> placemarks = await placemarkFromCoordinates(lat, long);
     setState(() {
@@ -72,7 +73,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final ref = FirebaseDatabase.instance.ref('users');
+    
     final appProvider = Provider.of<AppProvider>(context);
+
+    Future<bool> checkIfVideosExist() async {
+      final event = await ref.once(DatabaseEventType.value);
+      return event.snapshot.value != null;
+    }
 
     recordVideo() async {
       await getUserAddress();
@@ -173,6 +180,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Expanded(
                   child: FirebaseAnimatedList(
+                    sort: (a, b) {
+                      // sorting videos based on creation time
+                      DateTime aTime = DateTime.parse(a.child("createdAt").value.toString());
+                      DateTime bTime = DateTime.parse(b.child("createdAt").value.toString());
+
+                      return bTime.compareTo(aTime);
+                    },
                     query: ref,
                     itemBuilder: (context, snapshot, animation, index) {
                       return VideoCard(
