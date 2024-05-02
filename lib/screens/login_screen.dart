@@ -1,6 +1,7 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:recordify/provider/app_provider.dart';
@@ -15,11 +16,11 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController phoneController = TextEditingController();
-  
+  bool isDone = false;
   final FocusNode _focusNode = FocusNode();
-  
-   void _checkInputLength() {
-    if (phoneController.text.length >= 10) {
+
+  void _checkInputLength() {
+    if (phoneController.text.length == 10) {
       _focusNode.unfocus();
     }
   }
@@ -33,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void dispose() {
     phoneController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -110,51 +112,60 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: TextField(
-                        controller: phoneController,
-                        focusNode: _focusNode,
-                        textInputAction: TextInputAction.done,
-                        onChanged: (value) {
-                          phoneController.text = value;
-                        },
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        keyboardType: TextInputType.phone,
-                        decoration: InputDecoration(
-                          hintText: 'Enter mobile number',
-                          hintStyle: TextStyle(
-                            color: Colors.grey.shade700,
+                    Form(
+                      child: Expanded(
+                        child: TextFormField(
+                          controller: phoneController,
+                          focusNode: _focusNode,
+                          onChanged: (value) => {
+                            if(value.length == 10) {
+                              setState(() {
+                                isDone = true;
+                              })
+                            }
+                          },
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(
+                                10), // Limit input to 10 characters
+                          ],
+                          style: TextStyle(
+                            color: Colors.black,
                             fontSize: 18.sp,
-                            fontWeight: FontWeight.w400,
+                            fontWeight: FontWeight.bold,
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: Colors.black),
+                          keyboardType: TextInputType.phone,
+                          decoration: InputDecoration(
+                            hintText: 'Enter mobile number',
+                            hintStyle: TextStyle(
+                              color: Colors.grey.shade700,
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(color: Colors.black),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(color: Colors.black),
+                            ),
+                            suffixIcon: isDone
+                                ? Container(
+                                    height: 30.h,
+                                    width: 30.w,
+                                    margin: const EdgeInsets.all(10),
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.green,
+                                    ),
+                                    child: const Icon(
+                                      Icons.done,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  )
+                                : null,
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: Colors.black),
-                          ),
-                          suffixIcon: phoneController.text.length > 9
-                              ? Container(
-                                  height: 30.h,
-                                  width: 30.w,
-                                  margin: const EdgeInsets.all(10),
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.green,
-                                  ),
-                                  child: const Icon(
-                                    Icons.done,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                )
-                              : null,
                         ),
                       ),
                     ),
@@ -169,7 +180,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ElevatedButton(
                     onPressed: () async {
                       appProvider.toggleLoading();
-                      print("Verifying...");
                       await FirebaseAuth.instance.verifyPhoneNumber(
                         verificationCompleted:
                             (PhoneAuthCredential credential) {},

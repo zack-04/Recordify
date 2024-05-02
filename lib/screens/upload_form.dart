@@ -163,231 +163,218 @@ class _UploadFormState extends State<UploadForm> {
                     ],
                   ),
                 )
-              : Stack(
+              : Container(
+                margin: const EdgeInsets.all(12),
+                child: Column(
                   children: [
-                    Container(
-                      margin: const EdgeInsets.all(12),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Thumbnail',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: SizedBox(
+                        width: ScreenUtil().screenWidth,
+                        height: ScreenUtil().setHeight(250),
+                        child: FlickVideoPlayer(
+                          flickManager: flickManager,
+                          flickVideoWithControls:
+                              const FlickVideoWithControls(
+                                  videoFit: BoxFit.contain,
+                                  controls: FlickLandscapeControls()),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    Form(
                       child: Column(
                         children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Thumbnail',
-                              style: TextStyle(
-                                fontSize: 18,
+                          TextFormField(
+                            controller: titleController,
+                            onChanged: (value) =>
+                                titleController.text = value,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 20.sp, vertical: 15.sp),
+                              label: const Text('Title'),
+                              labelStyle: TextStyle(
+                                color: Colors.grey.shade700,
+                                fontSize: 16.sp,
                                 fontWeight: FontWeight.w400,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black),
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
+                          SizedBox(
+                            height: 15.h,
                           ),
-                          AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: SizedBox(
-                              width: ScreenUtil().screenWidth,
-                              height: ScreenUtil().setHeight(250),
-                              child: FlickVideoPlayer(
-                                flickManager: flickManager,
-                                flickVideoWithControls:
-                                    const FlickVideoWithControls(
-                                        videoFit: BoxFit.contain,
-                                        controls: FlickLandscapeControls()),
+                          TextFormField(
+                            controller: descriptionController,
+                            onChanged: (value) =>
+                                descriptionController.text = value,
+                            minLines: 4,
+                            maxLines: null,
+                            keyboardType: TextInputType.multiline,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 20.sp,
+                                vertical: 20.sp,
+                              ),
+                              label: const Text(
+                                'Description',
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey.shade700,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 15.h,
+                          ),
+                          TextFormField(
+                            controller: categoryController,
+                            decoration: InputDecoration(
+                              label: const Text(
+                                'Category',
+                              ),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  width: 2,
+                                  color: Colors.black,
+                                ),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              suffixIcon: Container(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    icon:
+                                        const Icon(Icons.arrow_drop_down),
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        categoryController.text =
+                                            newValue!;
+                                      });
+                                    },
+                                    items: categories
+                                        .map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 15.h,
+                          ),
+                          TextFormField(
+                            readOnly: true,
+                            controller: locationController,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 20.sp, vertical: 15.sp),
+                              label: const Text('Location'),
+                              labelStyle: TextStyle(
+                                color: Colors.grey.shade700,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black),
                               ),
                             ),
                           ),
                           SizedBox(
                             height: 20.h,
                           ),
-                          Form(
-                            child: Column(
-                              children: [
-                                TextFormField(
-                                  controller: titleController,
-                                  onChanged: (value) =>
-                                      titleController.text = value,
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 20.sp, vertical: 15.sp),
-                                    label: const Text('Title'),
-                                    labelStyle: TextStyle(
-                                      color: Colors.grey.shade700,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide:
-                                          const BorderSide(color: Colors.black),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide:
-                                          const BorderSide(color: Colors.black),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15.h,
-                                ),
-                                TextFormField(
-                                  controller: descriptionController,
-                                  onChanged: (value) =>
-                                      descriptionController.text = value,
-                                  minLines: 4,
-                                  maxLines: null,
-                                  keyboardType: TextInputType.multiline,
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 20.sp,
-                                      vertical: 20.sp,
-                                    ),
-                                    label: const Text(
-                                      'Description',
-                                    ),
-                                    labelStyle: TextStyle(
-                                      color: Colors.grey.shade700,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide:
-                                          const BorderSide(color: Colors.black),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide:
-                                          const BorderSide(color: Colors.black),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15.h,
-                                ),
-                                TextFormField(
-                                  controller: categoryController,
-                                  decoration: InputDecoration(
-                                    label: const Text(
-                                      'Category',
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                        width: 2,
-                                        color: Colors.black,
-                                      ),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    suffixIcon: Container(
-                                      padding: const EdgeInsets.only(right: 20),
-                                      child: DropdownButtonHideUnderline(
-                                        child: DropdownButton<String>(
-                                          icon:
-                                              const Icon(Icons.arrow_drop_down),
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              categoryController.text =
-                                                  newValue!;
-                                            });
-                                          },
-                                          items: categories
-                                              .map<DropdownMenuItem<String>>(
-                                                  (String value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: Text(value),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15.h,
-                                ),
-                                TextFormField(
-                                  readOnly: true,
-                                  controller: locationController,
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 20.sp, vertical: 15.sp),
-                                    label: const Text('Location'),
-                                    labelStyle: TextStyle(
-                                      color: Colors.grey.shade700,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide:
-                                          const BorderSide(color: Colors.black),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide:
-                                          const BorderSide(color: Colors.black),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.black,
-                                  ),
-                                  height: ScreenUtil().setHeight(40.h),
-                                  width: ScreenUtil().screenWidth,
-                                  child: TextButton(
-                                    onPressed: () async {
-                                      appProvider.toggleLoading();
-                                      await uploadUserData();
-                                      appProvider.toggleLoading();
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const SuccessScreen(),
-                                        ),
-                                      );
-                                    },
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: Colors.black,
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        'POST',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18.sp,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: appProvider.isLoading ? Colors.grey[700] : Colors.black,
                             ),
-                          )
+                            height: ScreenUtil().setHeight(40.h),
+                            width: ScreenUtil().screenWidth,
+                            child: TextButton(
+                              
+                              onPressed: appProvider.isLoading ? null : () async {
+                                appProvider.toggleLoading();
+                                await uploadUserData();
+                                appProvider.toggleLoading();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SuccessScreen(),
+                                  ),
+                                );
+                              },
+                              style: TextButton.styleFrom(
+                                backgroundColor: appProvider.isLoading ? Colors.grey[700] : Colors.black,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  appProvider.isLoading ? 'POSTING...' : 'POST',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                    Visibility(
-                      visible: appProvider.isLoading,
-                      child: Container(
-                        color: Colors.black.withOpacity(0.3),
-                        width: ScreenUtil().screenWidth,
-                        child: const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                    ),
+                    )
                   ],
-                )
+                ),
+              )
         ],
       ),
     );
